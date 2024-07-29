@@ -1,0 +1,28 @@
+cabal-version: 3.4
+name: loki-push-request
+version: 0.1.0.0
+synopsis: Encode push request for Loki
+license: BSD-3-Clause
+license-file: LICENSE
+author: Andrew Martin
+maintainer: andrew.thaddeus@gmail.com
+category: Data
+build-type: Simple
+extra-doc-files: CHANGELOG.md
+
+library
+    ghc-options: -Wall -O2
+    exposed-modules:
+      Loki.Push
+    build-depends:
+      , base >=4.17.2.1
+      , json-syntax >=0.2.5
+      , text >=2.0.2
+      , text-short >=0.1.5
+      , primitive >=0.9
+      , contiguous >=0.6.4.2
+      , bytebuild >=0.3.16.2
+      , natural-arithmetic >=0.1.2
+      , bytestring >=0.11
+    hs-source-dirs:   src
+    default-language: GHC2021
