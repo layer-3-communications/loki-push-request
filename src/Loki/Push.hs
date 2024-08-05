@@ -4,6 +4,9 @@
 
 module Loki.Push
   ( PushRequest(..)
+  , Stream(..)
+  , Entry(..)
+  , LabelPair(..)
   , pushRequestToJson
   ) where
 
