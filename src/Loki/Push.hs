@@ -11,7 +11,6 @@ module Loki.Push
   ) where
 
 import Json (pattern (:->))
-import Data.Text (Text)
 import Data.Text.Short (ShortText)
 import Data.Int (Int64)
 import Data.Primitive (SmallArray,ByteArray(ByteArray))
@@ -38,6 +37,7 @@ data LabelPair = LabelPair
 data Entry = Entry
   { timestamp :: !Int64
   , line :: !ShortText
+  , metadata :: !(SmallArray LabelPair)
   }
 
 -- Example JSON encoding from loki docs:
@@ -73,11 +73,12 @@ streamToJson Stream{labels,entries} = Json.object2
   ("values" :-> Json.Array (fmap entryToJson entries))
 
 entryToJson :: Entry -> Json.Value
-entryToJson Entry{timestamp,line} = Json.Array $ Contiguous.doubleton
+entryToJson Entry{timestamp,line,metadata} = Json.Array $ Contiguous.tripleton
   ( case Build.run Nat.constant (Build.int64Dec timestamp) of
       ByteArray x -> Json.String (TSU.fromShortByteStringUnsafe (SBS x))
   )
   (Json.String line)
+  (Json.Object (fmap labelPairToMember metadata))
 
 labelPairToMember :: LabelPair -> Json.Member
 labelPairToMember LabelPair{name,value} =
